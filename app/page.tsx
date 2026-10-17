@@ -28,7 +28,6 @@ const PERKS = [
   { figure: "69", label: "Wilayas covered", text: "Home or stop-desk delivery, anywhere in Algeria." },
   { figure: "24–72h", label: "Delivery time", text: "Orders confirmed by phone and shipped fast." },
   { figure: "100%", label: "Original parts", text: "Official warranty on every product we sell." },
-  { figure: "0 DA", label: "Paid upfront", text: "Cash on delivery — pay when it arrives." },
 ];
 
 export default function HomePage() {
@@ -43,12 +42,16 @@ export default function HomePage() {
       {/* Perks */}
       <section className="bg-surface-low pb-4 pt-10">
         <Reveal className="container-ifta">
-          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-outline-variant/70 ring-1 ring-outline-variant/70 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-outline-variant/70 ring-1 ring-outline-variant/70 sm:grid-cols-3">
             {PERKS.map(({ figure, label, text }) => (
-              <div key={label} className="bg-white px-5 py-6 sm:px-7 sm:py-8">
-                <div className="font-display text-2xl font-black tracking-tight text-primary-deep sm:text-3xl">{figure}</div>
-                <div className="mt-3 text-[11px] font-bold uppercase tracking-[0.18em] text-gold">{label}</div>
-                <p className="mt-1.5 text-xs leading-relaxed text-on-surface-variant sm:text-[13px]">{text}</p>
+              <div key={label} className="flex items-center gap-5 bg-white px-5 py-5 sm:block sm:px-7 sm:py-8">
+                <div className="w-28 shrink-0 whitespace-nowrap font-display text-xl font-black tracking-tight text-primary-deep sm:w-auto sm:text-3xl">
+                  {figure}
+                </div>
+                <div>
+                  <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold sm:mt-3">{label}</div>
+                  <p className="mt-1 text-xs leading-relaxed text-on-surface-variant sm:mt-1.5 sm:text-[13px]">{text}</p>
+                </div>
               </div>
             ))}
           </div>

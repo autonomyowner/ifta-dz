@@ -76,25 +76,60 @@ export function PcBuilder() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <div className="grid gap-3 border-t border-outline-variant/50 p-4 sm:grid-cols-2 sm:p-5">
-                      {slot.options.map((p) => (
-                        <button
-                          key={p.slug}
-                          onClick={() => pick(slot.id, p)}
-                          className={cn(
-                            "flex items-center gap-3 rounded-xl p-3 text-start ring-2 transition-all hover:-translate-y-0.5",
-                            sel?.slug === p.slug ? "bg-primary-fixed/50 ring-primary" : "ring-outline-variant/50 hover:ring-primary/40"
-                          )}
-                        >
-                          <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-surface-container">
-                            <Image src={p.images[0]} alt="" fill sizes="56px" className="object-cover" />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <div className="line-clamp-2 text-xs font-bold">{p.name}</div>
-                            <div className="mt-1 text-sm font-black text-primary">{formatDzd(p.price)}</div>
-                          </div>
-                        </button>
-                      ))}
+                    <div className="grid grid-cols-2 gap-3 border-t border-outline-variant/50 p-3 sm:gap-4 sm:p-5 xl:grid-cols-3">
+                      {slot.options.map((p) => {
+                        const active = sel?.slug === p.slug;
+                        return (
+                          <button
+                            key={p.slug}
+                            onClick={() => pick(slot.id, p)}
+                            className={cn(
+                              "group relative flex flex-col overflow-hidden rounded-2xl bg-white text-start ring-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover",
+                              active ? "shadow-card-hover ring-primary" : "shadow-card ring-outline-variant/40 hover:ring-primary/40"
+                            )}
+                          >
+                            <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-surface-container">
+                              <Image
+                                src={p.images[0]}
+                                alt={p.name}
+                                fill
+                                sizes="(max-width: 1280px) 45vw, 260px"
+                                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                              />
+                              <span className="absolute start-2 top-2 rounded-full bg-ink/80 px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest text-white backdrop-blur sm:start-3 sm:top-3 sm:text-[10px]">
+                                {p.brand}
+                              </span>
+                              <AnimatePresence>
+                                {active && (
+                                  <motion.span
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    exit={{ scale: 0 }}
+                                    transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                                    className="absolute end-2 top-2 flex size-8 items-center justify-center rounded-full bg-primary text-white shadow-glow sm:end-3 sm:top-3"
+                                  >
+                                    <Check className="size-4" strokeWidth={3} />
+                                  </motion.span>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                            <div className="flex w-full flex-1 flex-col p-3 sm:p-4">
+                              <div className="line-clamp-2 min-h-[2.6em] text-[12px] font-bold uppercase leading-snug tracking-tight sm:text-[13px]">
+                                {p.name}
+                              </div>
+                              <div className="mt-2 text-base font-black text-primary sm:text-lg">{formatDzd(p.price)}</div>
+                              <div
+                                className={cn(
+                                  "mt-3 rounded-lg py-2 text-center text-[10px] font-bold uppercase tracking-widest transition-colors",
+                                  active ? "bg-primary text-white" : "bg-surface-low text-on-surface-variant group-hover:bg-primary-fixed group-hover:text-primary"
+                                )}
+                              >
+                                {active ? "Selected" : "Select"}
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
                     </div>
                   </motion.div>
                 )}

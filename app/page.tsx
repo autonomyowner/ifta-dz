@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Truck, ShieldCheck, Headphones, CreditCard } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Hero } from "@/components/home/Hero";
 import { BrandMarquee } from "@/components/home/BrandMarquee";
 import { CategoryGrid } from "@/components/home/CategoryGrid";
@@ -25,10 +25,10 @@ function SectionHeading({ title, subtitle, eyebrow, dark }: { title: string; sub
 }
 
 const PERKS = [
-  { icon: Truck, title: "Fast delivery", text: "Shipping to all 69 wilayas within 24–72h." },
-  { icon: ShieldCheck, title: "Genuine warranty", text: "100% original products with official warranty." },
-  { icon: CreditCard, title: "Cash on delivery", text: "Pay when you receive your order, no surprises." },
-  { icon: Headphones, title: "Expert support", text: "Our technicians help you pick the right parts." },
+  { figure: "69", label: "Wilayas covered", text: "Home or stop-desk delivery, anywhere in Algeria." },
+  { figure: "24–72h", label: "Delivery time", text: "Orders confirmed by phone and shipped fast." },
+  { figure: "100%", label: "Original parts", text: "Official warranty on every product we sell." },
+  { figure: "0 DA", label: "Paid upfront", text: "Cash on delivery — pay when it arrives." },
 ];
 
 export default function HomePage() {
@@ -42,21 +42,17 @@ export default function HomePage() {
 
       {/* Perks */}
       <section className="bg-surface-low pb-4 pt-10">
-        <div className="container-ifta grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-5">
-          {PERKS.map(({ icon: Icon, title, text }, i) => (
-            <Reveal key={title} delay={i * 0.06}>
-              <div className="flex h-full items-start gap-3 rounded-2xl bg-white p-4 shadow-card ring-1 ring-outline-variant/40 sm:p-5">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-fixed text-primary">
-                  <Icon className="size-5" />
-                </span>
-                <div>
-                  <div className="text-sm font-bold">{title}</div>
-                  <div className="mt-0.5 hidden text-xs leading-relaxed text-on-surface-variant sm:block">{text}</div>
-                </div>
+        <Reveal className="container-ifta">
+          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-outline-variant/70 ring-1 ring-outline-variant/70 lg:grid-cols-4">
+            {PERKS.map(({ figure, label, text }) => (
+              <div key={label} className="bg-white px-5 py-6 sm:px-7 sm:py-8">
+                <div className="font-display text-2xl font-black tracking-tight text-primary-deep sm:text-3xl">{figure}</div>
+                <div className="mt-3 text-[11px] font-bold uppercase tracking-[0.18em] text-gold">{label}</div>
+                <p className="mt-1.5 text-xs leading-relaxed text-on-surface-variant sm:text-[13px]">{text}</p>
               </div>
-            </Reveal>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Reveal>
       </section>
 
       {/* Categories */}

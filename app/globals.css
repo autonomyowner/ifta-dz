@@ -1,26 +1,90 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* IFTA Computer — clear blue + champagne gold (from the logo) */
+@theme {
+  --color-primary: #0284c7;
+  --color-primary-bright: #0ea5e9;
+  --color-primary-deep: #075985;
+  --color-primary-fixed: #e0f2fe;
+  --color-primary-fixed-dim: #bae6fd;
+  --color-on-primary-fixed: #082f49;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-gold: #b59d78;
+  --color-gold-light: #e4d6bd;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --color-ink: #0b1b2b;
+  --color-surface: #f6f9fc;
+  --color-surface-low: #eef4f9;
+  --color-surface-container: #e6eef5;
+  --color-on-surface: #0f1d2b;
+  --color-on-surface-variant: #4a5a6b;
+  --color-outline-variant: #cfdbe6;
+
+  --font-sans: var(--font-inter), Inter, system-ui, sans-serif;
+  --font-display: var(--font-orbitron), Orbitron, sans-serif;
+
+  --shadow-card: 0 1px 2px rgba(11, 27, 43, 0.04), 0 8px 24px -8px rgba(11, 27, 43, 0.08);
+  --shadow-card-hover: 0 2px 6px rgba(2, 132, 199, 0.08), 0 30px 60px -20px rgba(2, 132, 199, 0.28);
+  --shadow-glow: 0 10px 30px -10px rgba(14, 165, 233, 0.6);
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  html,
+  body {
+    overflow-x: clip;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background: var(--color-surface);
+    color: var(--color-on-surface);
+  }
+  ::selection {
+    background: var(--color-primary-fixed-dim);
+    color: var(--color-on-primary-fixed);
+  }
+}
+
+@utility container-ifta {
+  width: 100%;
+  max-width: 1400px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 40rem) { padding-inline: 1.5rem; }
+  @media (width >= 64rem) { padding-inline: 3rem; }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+@utility marquee-mask {
+  mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
+}
+
+.marquee-mask:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-float {
+    animation: none;
+  }
 }

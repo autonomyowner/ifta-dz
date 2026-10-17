@@ -1,69 +1,149 @@
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, Truck, ShieldCheck, Headphones, CreditCard } from "lucide-react";
+import { Hero } from "@/components/home/Hero";
+import { BrandMarquee } from "@/components/home/BrandMarquee";
+import { CategoryGrid } from "@/components/home/CategoryGrid";
+import { PromoCarousel } from "@/components/home/PromoCarousel";
+import { ProductCard } from "@/components/shop/ProductCard";
+import { Reveal } from "@/components/ui/Reveal";
+import { buttonClass } from "@/components/ui/Button";
+import { featuredProducts, promoProducts } from "@/lib/products";
 
-export default function Home() {
+function SectionHeading({ title, subtitle, eyebrow, dark }: { title: string; subtitle?: string; eyebrow?: string; dark?: boolean }) {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div>
+      {eyebrow && (
+        <span className={`mb-2 inline-block text-xs font-bold uppercase tracking-widest ${dark ? "text-sky-300/80" : "text-primary"}`}>
+          {eyebrow}
+        </span>
+      )}
+      <h2 className={`mb-2 text-3xl font-black uppercase tracking-tighter lg:text-5xl ${dark ? "text-white" : ""}`}>{title}</h2>
+      {subtitle && <p className={`max-w-xl text-sm sm:text-base ${dark ? "text-white/60" : "text-on-surface-variant"}`}>{subtitle}</p>}
     </div>
+  );
+}
+
+const PERKS = [
+  { icon: Truck, title: "Fast delivery", text: "Shipping to all 69 wilayas within 24–72h." },
+  { icon: ShieldCheck, title: "Genuine warranty", text: "100% original products with official warranty." },
+  { icon: CreditCard, title: "Cash on delivery", text: "Pay when you receive your order, no surprises." },
+  { icon: Headphones, title: "Expert support", text: "Our technicians help you pick the right parts." },
+];
+
+export default function HomePage() {
+  const featured = featuredProducts();
+  const promos = promoProducts();
+
+  return (
+    <>
+      <Hero />
+      <BrandMarquee />
+
+      {/* Perks */}
+      <section className="bg-surface-low pb-4 pt-10">
+        <div className="container-ifta grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-5">
+          {PERKS.map(({ icon: Icon, title, text }, i) => (
+            <Reveal key={title} delay={i * 0.06}>
+              <div className="flex h-full items-start gap-3 rounded-2xl bg-white p-4 shadow-card ring-1 ring-outline-variant/40 sm:p-5">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-fixed text-primary">
+                  <Icon className="size-5" />
+                </span>
+                <div>
+                  <div className="text-sm font-bold">{title}</div>
+                  <div className="mt-0.5 hidden text-xs leading-relaxed text-on-surface-variant sm:block">{text}</div>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="bg-surface-low py-16 lg:py-24">
+        <div className="container-ifta">
+          <Reveal className="mb-10 text-center lg:mb-14">
+            <h2 className="text-3xl font-black uppercase tracking-tighter lg:text-5xl">Shop by category</h2>
+          </Reveal>
+          <CategoryGrid />
+        </div>
+      </section>
+
+      {/* Build your PC */}
+      <section className="bg-surface-low pb-16 lg:pb-24">
+        <div className="container-ifta">
+          <Reveal>
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#062a4a] via-primary-deep to-primary shadow-card">
+              <div className="pointer-events-none absolute -start-20 -top-20 size-80 rounded-full bg-primary-bright/30 blur-3xl" />
+              <div className="grid items-center md:grid-cols-2">
+                <div className="relative order-2 p-8 sm:p-10 md:order-1 lg:p-14">
+                  <span className="mb-3 inline-block text-xs font-bold uppercase tracking-widest text-gold-light">PC Configurator</span>
+                  <h2 className="mb-4 text-3xl font-black leading-[1.1] tracking-tight text-white sm:text-4xl lg:text-5xl">
+                    Build your dream PC
+                  </h2>
+                  <p className="mb-8 max-w-md text-sm leading-relaxed text-white/80 sm:text-base">
+                    Choose your components, check compatibility and see the total price instantly. Our team assembles and
+                    tests it before delivery.
+                  </p>
+                  <Link href="/build-pc" className={buttonClass("white", "md", "group")}>
+                    Start building <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
+                <div className="relative order-1 h-64 min-h-[320px] md:order-2 md:h-full">
+                  <Image
+                    src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=1200&q=75"
+                    alt="Gaming PC build"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 hidden bg-gradient-to-r from-primary-deep via-primary-deep/30 to-transparent md:block" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary-deep via-primary-deep/20 to-transparent md:hidden" />
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Featured */}
+      <section className="bg-white py-16 lg:py-24">
+        <div className="container-ifta">
+          <Reveal className="mb-10 flex items-end justify-between lg:mb-14">
+            <SectionHeading title="Featured products" subtitle="Hand-picked hardware our customers love right now." />
+            <Link
+              href="/shop"
+              className="hidden shrink-0 items-center gap-1.5 text-sm font-bold uppercase tracking-widest text-primary transition-colors hover:text-primary-deep sm:inline-flex"
+            >
+              View all <ArrowRight className="size-4" />
+            </Link>
+          </Reveal>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
+            {featured.map((p, i) => (
+              <Reveal key={p.slug} delay={(i % 4) * 0.06}>
+                <ProductCard product={p} />
+              </Reveal>
+            ))}
+          </div>
+          <div className="mt-8 flex justify-center sm:hidden">
+            <Link href="/shop" className="inline-flex items-center gap-1.5 text-sm font-bold uppercase tracking-widest text-primary">
+              View all <ArrowRight className="size-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Promos */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-ink via-[#0b2540] to-ink py-16 lg:py-24">
+        <div className="pointer-events-none absolute start-1/4 top-0 size-96 rounded-full bg-primary/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 end-10 size-72 rounded-full bg-gold/10 blur-3xl" />
+        <div className="container-ifta relative z-10">
+          <Reveal className="mb-10 flex items-end justify-between lg:mb-14">
+            <SectionHeading dark eyebrow="Limited time" title="Hot deals" subtitle="Special prices on top components while stock lasts." />
+          </Reveal>
+          <PromoCarousel products={promos} />
+        </div>
+      </section>
+    </>
   );
 }

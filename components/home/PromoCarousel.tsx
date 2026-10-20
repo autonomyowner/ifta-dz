@@ -46,7 +46,7 @@ export function PromoCarousel({ products }: { products: Product[] }) {
                       fill
                       sizes="300px"
                       draggable={false}
-                      className="pointer-events-none object-cover transition-transform duration-700 group-hover/card:scale-110"
+                      className="pointer-events-none object-contain p-8 transition-transform duration-700 group-hover/card:scale-105"
                     />
                     <div className="absolute start-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-lg">
                       <span className="size-1.5 animate-pulse rounded-full bg-white" />

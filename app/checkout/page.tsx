@@ -125,8 +125,8 @@ export default function CheckoutPage() {
             <ul className="mb-5 space-y-3">
               {items.map((i) => (
                 <li key={i.slug} className="flex items-center gap-3">
-                  <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-surface-container">
-                    <Image src={i.image} alt="" fill sizes="56px" className="object-cover" />
+                  <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-white ring-1 ring-outline-variant/50">
+                    <Image src={i.image} alt="" fill sizes="56px" className="object-contain p-1" />
                     <span className="absolute -end-0 -top-0 rounded-bl-lg bg-primary px-1.5 text-[10px] font-bold text-white">{i.qty}</span>
                   </div>
                   <span className="line-clamp-2 flex-1 text-xs font-semibold">{i.name}</span>

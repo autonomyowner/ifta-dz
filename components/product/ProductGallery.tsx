@@ -20,7 +20,7 @@ export function ProductGallery({ images, name, discount }: { images: string[]; n
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35 }}
           >
-            <Image src={images[active]} alt={name} fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+            <Image src={images[active]} alt={name} fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-contain p-8 sm:p-12" />
           </motion.div>
         </AnimatePresence>
         {discount !== null && (
@@ -41,7 +41,7 @@ export function ProductGallery({ images, name, discount }: { images: string[]; n
               )}
               aria-label={`Image ${i + 1}`}
             >
-              <Image src={img} alt="" fill sizes="120px" className="object-cover" />
+              <Image src={img} alt="" fill sizes="120px" className="object-contain p-2" />
             </button>
           ))}
         </div>

@@ -47,8 +47,8 @@ export default function CartPage() {
                   exit={{ opacity: 0, x: -40, transition: { duration: 0.2 } }}
                   className="flex items-center gap-4 rounded-2xl bg-white p-3 shadow-card ring-1 ring-outline-variant/50 sm:p-4"
                 >
-                  <Link href={`/product/${item.slug}`} className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-surface-container sm:size-24">
-                    <Image src={item.image} alt={item.name} fill sizes="96px" className="object-cover" />
+                  <Link href={`/product/${item.slug}`} className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-white ring-1 ring-outline-variant/50 sm:size-24">
+                    <Image src={item.image} alt={item.name} fill sizes="96px" className="object-contain p-2" />
                   </Link>
                   <div className="min-w-0 flex-1">
                     <Link href={`/product/${item.slug}`} className="line-clamp-2 text-sm font-bold uppercase tracking-tight hover:text-primary">

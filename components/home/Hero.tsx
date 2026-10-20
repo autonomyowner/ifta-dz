@@ -46,7 +46,7 @@ export function Hero() {
             className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-white/90 backdrop-blur"
           >
             <span className="size-1.5 animate-pulse rounded-full bg-primary-bright" />
-            New season · RTX 40 series in stock
+            New season · RTX 50 series in stock
           </motion.div>
 
           <motion.h1

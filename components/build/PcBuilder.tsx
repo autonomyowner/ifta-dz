@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { toast } from "sonner";
-import { Check, Cpu, CircuitBoard, MemoryStick, Gamepad2, HardDrive, Power, ShoppingCart, type LucideIcon } from "lucide-react";
+import { AlertTriangle, Box, Check, Cpu, CircuitBoard, Fan, MemoryStick, Gamepad2, HardDrive, Power, ShoppingCart, Zap, type LucideIcon } from "lucide-react";
 import { PRODUCTS, type Product } from "@/lib/products";
 import { useCart } from "@/lib/cart-store";
 import { formatDzd } from "@/lib/format";
@@ -20,8 +20,32 @@ const SLOTS: Slot[] = [
   { id: "ram", label: "Memory", icon: MemoryStick, options: byCat("memory") },
   { id: "gpu", label: "Graphics card", icon: Gamepad2, options: byCat("graphics-cards") },
   { id: "storage", label: "Storage", icon: HardDrive, options: byCat("storage") },
-  { id: "case", label: "Case & PSU", icon: Power, options: byCat("cases-power").filter((p) => p.brand !== "IFTA") },
+  { id: "cooler", label: "CPU cooler", icon: Fan, options: byCat("cooling") },
+  { id: "psu", label: "Power supply", icon: Power, options: byCat("power-supplies") },
+  { id: "case", label: "Case", icon: Box, options: byCat("cases") },
 ];
+
+const watts = (v?: string) => (v ? parseInt(v, 10) || 0 : 0);
+
+// Rough peak draw: graphics card + processor + ~150 W for the rest, which is
+// the usual sizing rule for a gaming PC.
+function estimatedWatts(picked: Record<string, Product>): number {
+  return watts(picked.gpu?.specs.Power) + watts(picked.cpu?.specs.TDP) + 150;
+}
+
+// Why `p` can't go in `slotId` alongside what's already picked, or null.
+function incompatibility(slotId: string, p: Product, picked: Record<string, Product>): string | null {
+  const { cpu, mobo, ram } = picked;
+  if (slotId === "mobo" && cpu && p.specs.Socket !== cpu.specs.Socket) return `Needs ${cpu.specs.Socket} for your processor`;
+  if (slotId === "cpu" && mobo && p.specs.Socket !== mobo.specs.Socket) return `Needs ${mobo.specs.Socket} for your motherboard`;
+  if (slotId === "ram" && mobo && !mobo.specs.Memory?.includes(p.specs.Type)) return `Your motherboard takes ${mobo.specs.Memory.replace(/^\d+×\s*/, "")}`;
+  if (slotId === "mobo" && ram && !p.specs.Memory?.includes(ram.specs.Type)) return `Doesn't take ${ram.specs.Type}`;
+  if (slotId === "psu" && (picked.gpu || cpu)) {
+    const need = estimatedWatts(picked);
+    if (watts(p.specs.Wattage) < need) return `Too weak: this build needs ~${need} W`;
+  }
+  return null;
+}
 
 const ASSEMBLY_FEE = 3000;
 
@@ -31,6 +55,11 @@ export function PcBuilder() {
   const add = useCart((s) => s.add);
 
   const parts = Object.values(picked);
+  const issues = SLOTS.flatMap((s) => {
+    const p = picked[s.id];
+    const reason = p && incompatibility(s.id, p, picked);
+    return reason ? [`${s.label}: ${reason}`] : [];
+  });
   const total = parts.reduce((s, p) => s + p.price, 0);
   const progress = Math.round((parts.length / SLOTS.length) * 100);
 
@@ -79,22 +108,24 @@ export function PcBuilder() {
                     <div className="grid grid-cols-2 gap-3 border-t border-outline-variant/50 p-3 sm:gap-4 sm:p-5 xl:grid-cols-3">
                       {slot.options.map((p) => {
                         const active = sel?.slug === p.slug;
+                        const conflict = incompatibility(slot.id, p, picked);
                         return (
                           <button
                             key={p.slug}
                             onClick={() => pick(slot.id, p)}
                             className={cn(
                               "group relative flex flex-col overflow-hidden rounded-2xl bg-white text-start ring-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover",
-                              active ? "shadow-card-hover ring-primary" : "shadow-card ring-outline-variant/40 hover:ring-primary/40"
+                              active ? "shadow-card-hover ring-primary" : "shadow-card ring-outline-variant/40 hover:ring-primary/40",
+                              conflict && !active && "opacity-60"
                             )}
                           >
-                            <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-surface-container">
+                            <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-white">
                               <Image
                                 src={p.images[0]}
                                 alt={p.name}
                                 fill
                                 sizes="(max-width: 1280px) 45vw, 260px"
-                                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                                className="object-contain p-4 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                               />
                               <span className="absolute start-2 top-2 rounded-full bg-ink/80 px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest text-white backdrop-blur sm:start-3 sm:top-3 sm:text-[10px]">
                                 {p.brand}
@@ -118,6 +149,12 @@ export function PcBuilder() {
                                 {p.name}
                               </div>
                               <div className="mt-2 text-base font-black text-primary sm:text-lg">{formatDzd(p.price)}</div>
+                              {conflict && (
+                                <div className="mt-2 flex items-start gap-1.5 text-[11px] font-semibold leading-snug text-rose-600">
+                                  <AlertTriangle className="mt-px size-3.5 shrink-0" />
+                                  {conflict}
+                                </div>
+                              )}
                               <div
                                 className={cn(
                                   "mt-3 rounded-lg py-2 text-center text-[10px] font-bold uppercase tracking-widest transition-colors",
@@ -163,6 +200,25 @@ export function PcBuilder() {
             <span className="font-semibold">{formatDzd(ASSEMBLY_FEE)}</span>
           </li>
         </ul>
+        {parts.length > 0 && (
+          <div className="mt-5 space-y-2 rounded-xl bg-white/5 p-3 text-xs">
+            <div className="flex items-center gap-2 text-white/70">
+              <Zap className="size-3.5 text-gold-light" />
+              Estimated power: <span className="font-semibold text-white">~{estimatedWatts(picked)} W</span>
+            </div>
+            {issues.length === 0 ? (
+              <div className="flex items-center gap-2 font-semibold text-emerald-300">
+                <Check className="size-3.5" /> All parts compatible
+              </div>
+            ) : (
+              issues.map((i) => (
+                <div key={i} className="flex items-start gap-2 font-semibold text-rose-300">
+                  <AlertTriangle className="mt-px size-3.5 shrink-0" /> {i}
+                </div>
+              ))
+            )}
+          </div>
+        )}
         <div className="mt-5 flex items-baseline justify-between border-t border-white/10 pt-5">
           <span className="font-bold">Total</span>
           <span className="text-3xl font-black text-sky-300">{formatDzd(total + (parts.length ? ASSEMBLY_FEE : 0))}</span>

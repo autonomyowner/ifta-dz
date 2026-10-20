@@ -88,8 +88,8 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                   onClick={onClose}
                   className="group flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-surface-low"
                 >
-                  <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-surface-container">
-                    <Image src={p.images[0]} alt="" fill sizes="48px" className="object-cover" />
+                  <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-white ring-1 ring-outline-variant/50">
+                    <Image src={p.images[0]} alt="" fill sizes="48px" className="object-contain p-1" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-sm font-semibold group-hover:text-primary">{p.name}</div>

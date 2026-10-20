@@ -13,7 +13,7 @@ Live: https://ifta-dz.vercel.app
 
 ## Pages
 
-Home · Shop (filters, search, sort) · Product (gallery, specs, inline "Buy now" order form) · Cart · Checkout (69 wilayas, home / stop-desk delivery) · Build PC · Services · Contact
+Home · Shop (category menu, per-category spec filters, brand, price range, stock, search, sort) · Product (gallery, specs, compatible parts, inline "Buy now" order form) · Cart · Checkout (69 wilayas, home / stop-desk delivery) · Build PC (8 slots with socket, memory and power-supply compatibility checks) · Services · Contact
 
 ## Development
 
@@ -25,7 +25,8 @@ npm run build
 
 ## Demo notes
 
-- Catalog is static data in `lib/products.ts` — no backend; orders and messages are not saved.
-- Product photos are Unsplash placeholders.
+- Catalog is static data in `lib/products.ts` (about 60 current-generation products, 13 categories) — no backend; orders and messages are not saved. Prices are demo prices in DZD.
+- Product photos are manufacturer images in `public/products/<slug>.<ext>` (`<slug>-2.<ext>` for extra angles). After adding or replacing one, run `node scripts/gen-product-images.mjs` to rebuild `lib/product-images.ts`.
+- Filters come from each category's `facets` list in `lib/products.ts`; every facet key must exist in that category's product `specs`.
 - Contact details (phone, email, WhatsApp) are placeholders.
 - Arabic language switch is not implemented yet.

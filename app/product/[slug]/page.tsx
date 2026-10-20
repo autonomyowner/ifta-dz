@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Truck, ShieldCheck, CreditCard, ChevronRight } from "lucide-react";
-import { PRODUCTS, getCategory, getProduct } from "@/lib/products";
+import { PRODUCTS, compatibleWith, getCategory, getProduct } from "@/lib/products";
 import { discountPercent, formatDzd } from "@/lib/format";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { ProductGallery } from "@/components/product/ProductGallery";
@@ -32,6 +32,7 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
   const category = getCategory(product.category);
   const discount = discountPercent(product.price, product.comparePrice);
   const related = PRODUCTS.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 4);
+  const compatible = compatibleWith(product);
   const more = related.length < 4 ? PRODUCTS.filter((p) => p.featured && p.slug !== product.slug && !related.includes(p)).slice(0, 4 - related.length) : [];
 
   return (
@@ -94,6 +95,22 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
             </div>
           </div>
         </div>
+
+        {compatible && compatible.items.length > 0 && (
+          <section className="mt-20 lg:mt-28">
+            <Reveal className="mb-8">
+              <div className="text-[11px] font-bold uppercase tracking-widest text-gold">Compatible parts</div>
+              <h2 className="mt-1 text-2xl font-black uppercase tracking-tighter lg:text-4xl">{compatible.title}</h2>
+            </Reveal>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
+              {compatible.items.slice(0, 8).map((p, i) => (
+                <Reveal key={p.slug} delay={(i % 4) * 0.06}>
+                  <ProductCard product={p} />
+                </Reveal>
+              ))}
+            </div>
+          </section>
+        )}
 
         {related.length + more.length > 0 && (
           <section className="mt-20 lg:mt-28">

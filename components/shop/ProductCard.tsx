@@ -11,14 +11,14 @@ export function ProductCard({ product, priority }: { product: Product; priority?
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-outline-variant/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover hover:ring-primary/30">
       <Link href={`/product/${product.slug}`} className="block">
-        <div className="relative aspect-square overflow-hidden bg-surface-low">
+        <div className="relative aspect-square overflow-hidden bg-white">
           <Image
             src={product.images[0]}
             alt={product.name}
             fill
             priority={priority}
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
+            className="object-contain p-4 transition-transform duration-700 ease-out group-hover:scale-[1.05] sm:p-6"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/25 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 

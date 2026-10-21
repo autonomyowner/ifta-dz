@@ -29,7 +29,7 @@ function ProductsMenu({ onNavigate }: { onNavigate: () => void }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.18 }}
-      className="absolute inset-x-0 top-full border-t border-outline-variant/50 bg-white shadow-[0_24px_48px_-24px_rgba(11,27,43,0.25)]"
+      className="absolute inset-x-0 top-full hidden border-t border-outline-variant/50 bg-white shadow-[0_24px_48px_-24px_rgba(11,27,43,0.25)] lg:block"
     >
       <div className="container-ifta grid grid-cols-[1fr_1fr_1fr_280px] gap-10 py-8">
         {CATEGORY_GROUPS.map((g) => (
@@ -191,11 +191,7 @@ export function Header() {
             </Link>
           </div>
           <AnimatePresence>
-            {productsOpen && (
-              <div className="hidden lg:block">
-                <ProductsMenu onNavigate={() => setProductsOpen(false)} />
-              </div>
-            )}
+            {productsOpen && <ProductsMenu key="products-menu" onNavigate={() => setProductsOpen(false)} />}
           </AnimatePresence>
         </nav>
       </header>
